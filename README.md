@@ -1,18 +1,18 @@
-# BT-ATBMHTTT-2 - *Name of your app*
+# BT-ATBMHTTT-2 - *Cryptography*
 
-**Name of your app** là một bài tập 2 tại môn ATBMHTTT. Bài tập yêu cầu sinh viên tạo cơ sở dữ liệu, mã hóa theo các yêu cầu.
+**Cryptography** là một bài tập 2 tại môn ATBMHTTT. Bài tập yêu cầu sinh viên tạo cơ sở dữ liệu, mã hóa theo các yêu cầu.
 
 Thành viên:
-* [ ] **MSSV1** Tên sinh viên 1 (tên tài khoản github)
-* [ ] **MSSV2** Tên sinh viên 2 (tên tài khoản github)
-* [ ] **MSSV3** Tên sinh viên 2 (tên tài khoản github)
+* [ ] **1412356** Nguyễn Đào Thảo Nguyên (ndtnguyen)
+* [ ] **1412405** Nguyễn Hồng Phúc (HongPhuc-1412405)
+* [ ] **1412592** Võ Hiếu Trung (VHTrung)
 
 ## Yêu cầu
 
 Sinh viên check vào các mục bên dưới và ghi mã sinh viên đã làm vào chức năng theo mẫu. Mục nào ko có MSSV là tính điểm theo nhóm. Cần sắp xếp các chức năng bên dưới theo thứ tự MSSV đã thực hiện.
 
 Yêu cầu **GIT**
-* [ ] Có sử dụng GIT.
+* [X ] Có sử dụng GIT.
 * [ ] Sử dụng GIT theo Centralized Workflow.
 * [ ] Sử dụng GIT theo Feature Branch Workflow.
 * [ ] Sử dụng GIT theo Gitflow Workflow.
