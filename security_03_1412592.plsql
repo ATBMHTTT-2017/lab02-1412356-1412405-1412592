@@ -12,6 +12,27 @@ ADD
 );
 
 
- 
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- HASH KEY FUNCTION
+
+CREATE OR REPLACE 
+FUNCTION fn_hash_key
+(
+  in_key IN VARCHAR2
+)
+RETURN RAW
+AS
+BEGIN
+	RETURN dbms_crypto.HASH( 
+                                                        src => UTL_RAW.cast_to_raw(in_key),
+                                                        TYP => DBMS_CRYPTO.HASH_SH1
+                                                       );
+END;
+
+
+
 
 
