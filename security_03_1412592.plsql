@@ -108,3 +108,29 @@ END;
 
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- UPDATE hashedKey COLUMN
+
+UPDATE atbmhtttdba.CHITIEU SET hashedKey = fn_hash_key('TD001103') WHERE duAn = '001011';
+UPDATE atbmhtttdba.CHITIEU SET hashedKey = fn_hash_key('TD002103') WHERE duAn = '002012';
+UPDATE atbmhtttdba.CHITIEU SET hashedKey = fn_hash_key('TD003103') WHERE duAn = '003033';
+UPDATE atbmhtttdba.CHITIEU SET hashedKey = fn_hash_key('TD004103') WHERE duAn = '004014';
+UPDATE atbmhtttdba.CHITIEU SET hashedKey = fn_hash_key('TD005103') WHERE duAn = '005015';
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- UPDATE soTien COLUMN
+
+UPDATE atbmhtttdba.CHITIEU SET soTien = fn_encrypt(soTienRaw, 'TD001103') WHERE duAn = '001011';
+UPDATE atbmhtttdba.CHITIEU SET soTien = fn_encrypt(soTienRaw, 'TD002103') WHERE duAn = '002012';
+UPDATE atbmhtttdba.CHITIEU SET soTien = fn_encrypt(soTienRaw, 'TD003103') WHERE duAn = '003033';
+UPDATE atbmhtttdba.CHITIEU SET soTien = fn_encrypt(soTienRaw, 'TD004103') WHERE duAn = '004014';
+UPDATE atbmhtttdba.CHITIEU SET soTien = fn_encrypt(soTienRaw, 'TD005103') WHERE duAn = '005015';
+
+
+
+
+
