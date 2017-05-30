@@ -83,3 +83,28 @@ BEGIN
 	END IF;
 END;
 
+CREATE OR REPLACE
+FUNCTION fn_decrypt_to_raw
+(
+  in_data IN VARCHAR2,
+  in_hashed_key IN VARCHAR2,
+  in_key IN VARCHAR2
+)
+RETURN RAW
+AS
+BEGIN
+	IF (dbms_crypto.HASH(src => UTL_RAW.cast_to_raw(in_key),typ => dbms_crypto.HASH_SH1) = in_hashed_key)  THEN
+    RETURN dbms_crypto.decrypt(
+                                                              src => in_data,
+                                                              typ => dbms_crypto.DES_CBC_PKCS5,
+                                                              KEY => UTL_RAW.cast_to_raw(in_key)
+                                                            );
+    ELSE
+		RETURN in_data;
+	END IF;
+END;
+
+
+
+
+
