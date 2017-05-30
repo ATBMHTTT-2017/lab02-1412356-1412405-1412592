@@ -63,7 +63,7 @@ END;
 -- DECRYPT  FUNCTION
 
 CREATE OR REPLACE
-FUNCTION fn_decrypt
+FUNCTION fn_decrypt_to_number
 (
   in_data IN VARCHAR2,
   in_hashed_key IN VARCHAR2,
