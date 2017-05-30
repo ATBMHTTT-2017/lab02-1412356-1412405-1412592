@@ -36,3 +36,26 @@ END;
 
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- ENCRYPT FUNCTION
+
+CREATE OR REPLACE
+FUNCTION fn_encrypt
+(
+  in_data IN VARCHAR2, 
+  in_key IN VARCHAR2
+)
+return RAW DETERMINISTIC
+AS
+BEGIN
+	RETURN DBMS_CRYPTO.encrypt( 
+                                                                  src => in_data,
+                                                                  typ => dbms_crypto.DES_CBC_PKCS5,
+                                                                  key =>UTL_RAW.cast_to_raw(in_key)
+                                                                );
+END;
+
+
+
+
+
