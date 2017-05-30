@@ -59,3 +59,27 @@ END;
 
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- DECRYPT  FUNCTION
+
+CREATE OR REPLACE
+FUNCTION fn_decrypt
+(
+  in_data IN VARCHAR2,
+  in_hashed_key IN VARCHAR2,
+  in_key IN VARCHAR2
+)
+RETURN NUMBER
+AS
+BEGIN
+	IF (dbms_crypto.HASH(src => UTL_RAW.cast_to_raw(in_key),typ => dbms_crypto.HASH_SH1) = in_hashed_key)  THEN
+    RETURN to_number(dbms_crypto.decrypt(
+                                                                                  src => in_data,
+                                                                                  typ => dbms_crypto.DES_CBC_PKCS5,
+                                                                                  KEY => UTL_RAW.cast_to_raw(in_key)
+                                                                                ));
+    ELSE
+		RETURN NULL;
+	END IF;
+END;
+
