@@ -1,5 +1,5 @@
 ----------------------Insert new column in table PHANCONG:signature-------------------
-ALTER TABLE atbmhtttdba.PHANCONG
+ALTER TABLE atbmdba.PHANCONG
 ADD 
 (
   signature RAW(2000)
@@ -8,25 +8,24 @@ ADD
 --------------------------CREATE FUNCTION create_signature AND verify_signature-------------------------
 CREATE OR REPLACE FUNCTION create_signature(
                                        in_message IN NUMBER,
-                                        in_private_key IN CLOB )
-RETURN raw
-IS
+                                        in_private_key in clob )
+RETURN RAW
+AS
   signature RAW(2000);
 BEGIN
     --
     -- RSA SIGN
     --
-  signature := ORA_RSA.SIGN(message => UTL_I18N.STRING_TO_RAW(in_message, 'AL32UTF8'),
+        signature := ORA_RSA.SIGN(message => UTL_I18N.STRING_TO_RAW(in_message, 'AL32UTF8'),
         private_key => UTL_RAW.cast_to_raw(in_private_key),
-        private_key_password => '',
-        hash => ora_rsa.hash_sha256);
+        hash => ORA_RSA.HASH_SHA256);
   RETURN signature;
 END;
 
  
-CREATE OR REPLACE FUNCTION verify_signature(in_message IN NUMBER, in_signature IN RAW, in_public_key IN CLOB)
-RETURN varchar2 DETERMINISTIC
-IS
+create or replace function verify_signature(in_message in number, in_signature in raw, in_public_key in clob)
+RETURN RAW
+AS
   signature_check_result PLS_INTEGER;
 BEGIN	
     --
@@ -62,46 +61,47 @@ BEGIN
 END;
 
 --------------CREATE SIGNATURE AND INSERT IT'S VALUES INTO TABLE PHANCONG--------------
+declare
+  private_key clob := '-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMJOVHMWQpGWTiR7
+F5z3WQIIvJYUDubZAPUxzj2NgriomhnowjgiK40Q2UPNxgBq3wlMhMpAp01+Or6R
+2mkOctOZ55Qjgm2VzTovW4MuOLWGB43fXm3qDe05/SIdV3K3h2KVwcNqecJTR25T
+RNeGHo4r8cce3BnuVzEKjk2DNQOXAgMBAAECgYEAuqIMQaL+++IYWrgU/UMkLmz/
+31OS4K9NWTamt77F8eKYagyFCO/hTxUA6zyqU9pTMxZZcf9Z83gsqsFjvYcQSHy6
+mRXFuORzh0r/wXKJtyFF0B26KC7WipqtPAuzn7SNGNeMh8g3H1qH8neEjir15Uai
+6lR/sDIOZlO9sUJoZBECQQDkLXnXl/YXGoQDdupUQMzrF+ZK/od2U9YjdSOi+k/j
+x23usurtzRhYGW/73vJd9Sw6Qc6ijPr+ItSpnl+qaxzvAkEA2f+OVzn1HwmYbc2a
+Booo32aT96TJrwN8V4gC7m5hseHoXDDoXmwLZwNm7+w0vu3lk1p9tSqs8oc/nR0E
+fHhT2QJAOQslasCSxTPbzQHtkyKgGCXhbN40/1/2KOcgAZ6SWl+BHCuej9S2QVAa
+rt0Num+Qnv/UqM6V8PLEN6NgRzqAAQJBALeQYrp+WjKNcOYc97LECdC73qLsBswx
+QjWumNFO70LLOE7Q/AnuLtfKXJZwrqWLSwJ+c1XnHoSGcIGK2qk45VkCQA6b1qCv
+jGFksgcQ8vff5lwOWfJ2ZxA8Zpgeq5w7EaDTWS/WhtVUYg3bBsadgXb3LxpZScxq
+U4Ad7pAZrI6H6Tc=
+-----END PRIVATE KEY-----';
+begin
+  update phancong set signature= create_digital_signature(0.5,private_key)   where manv='TC001001';
+  update phancong set signature= create_digital_signature(0.2,private_key)   where manv='TC002001';
+  update phancong set signature= create_digital_signature(0.1,private_key)   where manv='TP001002';
+  update phancong set signature= create_digital_signature(0.3,private_key)   where manv='TP003002';
+  UPDATE PHANCONG SET signature= create_digital_signature(0.8,private_key)  WHERE maNV='TP005002';
+end;
 
-DECLARE
-  in_private_key CLOB := '-----BEGIN RSA PRIVATE KEY-----
-MIICWgIBAAKBgFHCVMcO2wbSdathk6+bhYZT4wfffgvFqPVx+m1XUWylNNUHNqMm
-jDyesIRVPI83k5sg6i6TfW6s2kT5IDagtOwIS8uWaKnbkVkLV4HyBkkneGDZSD3A
-/OwpQn+QnnCMQwgExXd79IdhiM4ja0pU8yPAGVQHXXCxXj3+aVy6Y0o/AgMBAAEC
-gYAMBrHBtgWxszNryiaXJiE16RD0D4PS53g64lEb1EQ93u8uhqkaxojKQe1lCcSm
-rF4h622G/Fru9K4Ghz6dynXSN5B3YdihuTxxI10yaCphkRtfbVX1a7GaxQjWDbI6
-gNhP7TI0LtMTY0DiMdcgW32Qt4NtPDlmZrPoJeUFN8pDQQJBAJ1GHTP6pj7VPA9U
-kWCMFUbW7pEVy9ACX0leQB/uG8YSmuh7nVmT6GXlt+A1yKBJGQ52SAH677w+0Kvw
-YjLApXMCQQCFFQFj6qBZb/5lpHWhfwr+qseq16gSW+RweReJ9m8JP31Snl6ss2rD
-3LppoIWsOLH32OH3L98RvfGhJ1DeU/UFAkAD1RqPErOMYmvVP81PGfrGwCQOGwbd
-acFiq05KuOWqXPezZJfAAA+ws/lYGFdsOHvI028LxU6kOq+hEPmDnRgrAkA5vLhC
-shtpUhZr4KMMMsMBY/SGYVPQyz9bsJ2OxHS97WagvobSpHCQkyXpB7SW2G4V2mmG
-xaUg3GiFgzopiwFFAkAgAHirsCZaC0s1Ghf9qh9El6bBZa7pdCs5RayoaD44csMn
-ZXjBZSlT7B5+GVO+BdpuIznbc9Ar+FEFflgRX6ZB
------END RSA PRIVATE KEY-----';
-signature RAW(2000);
-BEGIN
-FOR PC IN (SELECT * FROM PHANCONG)
-  LOOP  
-	  signature:=create_signature(PC.phuCap,in_private_key); 
-	  UPDATE PHANCONG SET signature=signature WHERE maNV=PC.maNV;
-	  COMMIT;
-  END LOOP;
-END;
 -------------------------------VERIFY SIGNATURE------------------------------
-DECLARE
-in_public_key CLOB := '-----BEGIN PUBLIC KEY-----
-MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgFHCVMcO2wbSdathk6+bhYZT4wff
-fgvFqPVx+m1XUWylNNUHNqMmjDyesIRVPI83k5sg6i6TfW6s2kT5IDagtOwIS8uW
-aKnbkVkLV4HyBkkneGDZSD3A/OwpQn+QnnCMQwgExXd79IdhiM4ja0pU8yPAGVQH
-XXCxXj3+aVy6Y0o/AgMBAAE=
+
+declare
+  in_public_key clob := '-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCTlRzFkKRlk4kexec91kCCLyW
+FA7m2QD1Mc49jYK4qJoZ6MI4IiuNENlDzcYAat8JTITKQKdNfjq+kdppDnLTmeeU
+I4Jtlc06L1uDLji1hgeN315t6g3tOf0iHVdyt4dilcHDannCU0duU0TXhh6OK/HH
+HtwZ7lcxCo5NgzUDlwIDAQAB
 -----END PUBLIC KEY-----';
-BEGIN
-FOR PC IN (SELECT * FROM atbmhtttdba.PHANCONG)
-  LOOP  
-	  IF PC.maNV=sys_context ('userenv', 'session_user') THEN
-	  ATBMHTTTDBA.verify_signature(PC.phuCap,PC.signature, in_public_key); 
-	  END IF;
-  END LOOP;
+sig raw(2000);
+phucap float;
+begin 
+  select phuCap into phucap from atbmdba.phancong where manv = user;
+  select signature into sig from atbmdba.phancong where manv = user;
+	  atbmdba.verify_signature(phucap, sig, in_public_key); 
 END;
 
+------GRANT FOR USER--------------
+grant execute on verify_generature to TC001001; 

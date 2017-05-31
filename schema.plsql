@@ -76,12 +76,13 @@ CREATE TABLE CHITIEU
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Tạo bảng Phân Công
+--drop table PHANCONG
 CREATE TABLE PHANCONG
 (
   maNV CHAR(8) NOT NULL
   ,duAn CHAR(6) NOT NULL
   ,vaiTro NVARCHAR2(50) NOT NULL
-  ,phuCap INT NOT NULL
+  ,phuCap FLOAT NOT NULL
   ,CONSTRAINT PK_PHANCONG PRIMARY KEY(maNV, duAn) ENABLE
   ,CONSTRAINT FK_PHANCONG_DUAN FOREIGN KEY(duAn) REFERENCES DUAN(maDA) ENABLE
   ,CONSTRAINT FK_PHANCONG_NHANVIEN FOREIGN KEY(maNV) REFERENCES NHANVIEN(maNV) ENABLE
