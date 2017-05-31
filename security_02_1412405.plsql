@@ -6,9 +6,7 @@ ADD
 );
 
 --------------------------CREATE FUNCTION create_signature AND verify_signature-------------------------
-CREATE OR REPLACE FUNCTION create_signature(
-                                       in_message IN NUMBER,
-                                        in_private_key in clob )
+CREATE OR REPLACE FUNCTION create_signature( in_message IN NUMBER, in_private_key in clob )
 RETURN RAW
 AS
   signature RAW(2000);
