@@ -8,3 +8,8 @@ FROM atbmhtttdba.CHITIEU;
 SELECT maChiTieu,  fn_decrypt_to_raw(soTien, hashedKey, 'TD001103') AS soTien, soTienRaw, duAn
 FROM atbmhtttdba.CHITIEU;
 
+SELECT maChiTieu,  fn_decrypt_to_number(soTien, hashedKey, 'TD004103') AS soTien, soTienRaw, duAn
+FROM atbmhtttdba.CHITIEU;
+
+SELECT maChiTieu,  fn_decrypt_to_raw(soTien, hashedKey, 'TD004103') AS soTien, soTienRaw, duAn
+FROM atbmhtttdba.CHITIEU;
