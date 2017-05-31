@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION create_signature(
                                         in_private_key IN CLOB )
 RETURN raw
 IS
-  signature RAW(32000);
+  signature RAW(2000);
 BEGIN
     --
     -- RSA SIGN
@@ -24,7 +24,7 @@ BEGIN
 END;
 
  
-CREATE OR REPLACE FUNCTION verify_signature(in_message IN VARCHAR2, in_signature IN RAW, in_public_key IN CLOB)
+CREATE OR REPLACE FUNCTION verify_signature(in_message IN NUMBER, in_signature IN RAW, in_public_key IN CLOB)
 RETURN varchar2 DETERMINISTIC
 IS
   signature_check_result PLS_INTEGER;
@@ -32,9 +32,6 @@ BEGIN
     --
     -- RSA VERIFY
     --
-  IF in_signature IS NULL THEN
-		RETURN 'Signature cannot be verified.';
-	END IF; 
     signature_check_result := ORA_RSA.VERIFY(message => UTL_I18N.STRING_TO_RAW(in_message, 'AL32UTF8'), 
         signature => in_signature, 
         public_key => UTL_RAW.cast_to_raw(in_public_key),
@@ -91,19 +88,19 @@ FOR PC IN (SELECT * FROM PHANCONG)
 	  COMMIT;
   END LOOP;
 END;
--------------------------------
+-------------------------------VERIFY SIGNATURE------------------------------
 DECLARE
-in_public_key CLON := '-----BEGIN PUBLIC KEY-----
+in_public_key CLOB := '-----BEGIN PUBLIC KEY-----
 MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgFHCVMcO2wbSdathk6+bhYZT4wff
 fgvFqPVx+m1XUWylNNUHNqMmjDyesIRVPI83k5sg6i6TfW6s2kT5IDagtOwIS8uW
 aKnbkVkLV4HyBkkneGDZSD3A/OwpQn+QnnCMQwgExXd79IdhiM4ja0pU8yPAGVQH
 XXCxXj3+aVy6Y0o/AgMBAAE=
 -----END PUBLIC KEY-----';
 BEGIN
-FOR PC IN (SELECT * FROM ATBMHTTTDBA.PHANCONG)
+FOR PC IN (SELECT * FROM atbmhtttdba.PHANCONG)
   LOOP  
 	  IF PC.maNV=sys_context ('userenv', 'session_user') THEN
-	  ATBMHTTTDBA.verify_signature(PC.phuCap,in_public_key,PC.signature); 
+	  ATBMHTTTDBA.verify_signature(PC.phuCap,PC.signature, in_public_key); 
 	  END IF;
   END LOOP;
 END;
