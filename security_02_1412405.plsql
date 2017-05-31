@@ -77,11 +77,11 @@ jGFksgcQ8vff5lwOWfJ2ZxA8Zpgeq5w7EaDTWS/WhtVUYg3bBsadgXb3LxpZScxq
 U4Ad7pAZrI6H6Tc=
 -----END PRIVATE KEY-----';
 begin
-  update phancong set signature= create_digital_signature(0.5,private_key)   where manv='TC001001';
-  update phancong set signature= create_digital_signature(0.2,private_key)   where manv='TC002001';
-  update phancong set signature= create_digital_signature(0.1,private_key)   where manv='TP001002';
-  update phancong set signature= create_digital_signature(0.3,private_key)   where manv='TP003002';
-  UPDATE PHANCONG SET signature= create_digital_signature(0.8,private_key)  WHERE maNV='TP005002';
+  update phancong set signature= create_signature(0.5,private_key)   where manv='TC001001';
+  update phancong set signature= create_signature(0.2,private_key)   where manv='TC002001';
+  update phancong set signature= create_signature(0.1,private_key)   where manv='TP001002';
+  update phancong set signature= create_signature(0.3,private_key)   where manv='TP003002';
+  UPDATE PHANCONG SET signature= create_signature(0.8,private_key)  WHERE maNV='TP005002';
 end;
 
 -------------------------------VERIFY SIGNATURE------------------------------
@@ -101,5 +101,6 @@ begin
 	  atbmdba.verify_signature(phucap, sig, in_public_key); 
 END;
 
-------GRANT FOR USER--------------
+------GRANT FOR USER TO VERIFY SIGNATURE--------------
+grant select on atbmdba.PHANCONG to TC001001;
 grant execute on verify_generature to TC001001; 
