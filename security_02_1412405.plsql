@@ -103,4 +103,4 @@ END;
 
 ------GRANT FOR USER TO VERIFY SIGNATURE--------------
 grant select on atbmdba.PHANCONG to TC001001;
-grant execute on verify_generature to TC001001; 
+grant execute on atbmdba.verify_generature to TC001001; 
