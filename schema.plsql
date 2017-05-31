@@ -76,12 +76,13 @@ CREATE TABLE CHITIEU
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Tạo bảng Phân Công
+--drop table PHANCONG
 CREATE TABLE PHANCONG
 (
   maNV CHAR(8) NOT NULL
   ,duAn CHAR(6) NOT NULL
   ,vaiTro NVARCHAR2(50) NOT NULL
-  ,phuCap INT NOT NULL
+  ,phuCap FLOAT NOT NULL
   ,CONSTRAINT PK_PHANCONG PRIMARY KEY(maNV, duAn) ENABLE
   ,CONSTRAINT FK_PHANCONG_DUAN FOREIGN KEY(duAn) REFERENCES DUAN(maDA) ENABLE
   ,CONSTRAINT FK_PHANCONG_NHANVIEN FOREIGN KEY(maNV) REFERENCES NHANVIEN(maNV) ENABLE
@@ -470,31 +471,3 @@ END;
 
 
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------
---- 6. VPD
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------------------------------------------
--- Chỉ trưởng dự án được phép xem và cập nhật thông tin chi tiêu của dự án của mình. (VPD)
-CREATE OR REPLACE
-FUNCTION sec_qlChiTieu
-(
-    p_schema VARCHAR2,
-    p_object VARCHAR2
-)
-RETURN VARCHAR2
-as
-  duAn CHAR(6);
-BEGIN
-  SELECT maDA INTO duAn FROM atbmhtttdba.DUAN  WHERE truongDA = USER;
-  RETURN 'duAn='|| q'[']' || duAn || q'[']';
-END;
-BEGIN
-  DBMS_RLS.add_policy
-  (object_schema => 'atbmhtttdba',
-  object_name => 'CHITIEU',
-  policy_name => 'S_U_ChiTieu',
-  function_schema => 'atbmhtttdba',
-  policy_function => 'sec_qlChiTieu',
-  statement_types => 'SELECT, UPDATE');
-END;
